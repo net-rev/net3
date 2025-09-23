@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Networking 2 - Reviewer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #0a092d;  /* Quizlet dark mode background */
+            min-height: 100vh;  /* Full viewport height */
+            box-sizing: border-box;  /* Include padding in height calculation */
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            width: 100%;  /* Full width */
+            max-width: 600px;  /* Maximum width for larger screens */
+            margin: 0 auto;
+        }
+
+        .container h1 {
+            color: #f6f7fb;  /* Quizlet light text */
+            font-size: clamp(1.5rem, 5vw, 2rem);  /* Responsive font size */
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .btn {
+            width: 100%;  /* Full width on mobile */
+            max-width: 400px;  /* Maximum width for larger screens */
+            padding: 15px 25px;
+            font-size: clamp(14px, 4vw, 16px);  /* Responsive font size */
+            border: 1px solid #8a98fe;  /* Quizlet primary blue */
+            background-color: transparent;
+            color: #f6f7fb;  /* Quizlet light text */
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            word-wrap: break-word;  /* Handle long text */
+        }
+
+        .btn:hover {
+            background-color: rgba(66, 85, 255, 0.1);  /* Quizlet hover state */
+            border-color: #a5b0ff;
+        }
+
+        .btn.correct {
+            background-color: #1d8653;  /* Quizlet correct answer green */
+            border-color: #1d8653;
+            color: #f6f7fb;
+        }
+
+        .btn.incorrect {
+            background-color: #b61a1a;  /* Quizlet incorrect answer red */
+            border-color: #b61a1a;
+            color: #f6f7fb;
+        }
+
+        .question {
+            font-size: clamp(16px, 4vw, 18px);  /* Responsive font size */
+            margin: 20px 10px;
+            text-align: center;
+            color: #f6f7fb;  /* Quizlet light text */
+            word-wrap: break-word;  /* Handle long questions */
+        }
+
+        .navigation {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;  /* Allow wrapping on small screens */
+            justify-content: center;
+            width: 100%;
+        }
+
+        .next-btn, .back-btn, .menu-btn {
+            padding: 12px 20px;
+            font-size: clamp(12px, 3.5vw, 14px);  /* Responsive font size */
+            border: 1px solid #a5b0ff;  /* Pastel blue */
+            background-color: transparent;
+            color: #f6f7fb;  /* Quizlet light text */
+            border-radius: 8px;
+            cursor: pointer;
+            display: none;
+            min-width: 100px;  /* Minimum button width */
+            text-align: center;
+        }
+
+        .next-btn:hover, .back-btn:hover, .menu-btn:hover {
+            background-color: rgba(66, 85, 255, 0.1);  /* Quizlet hover state */
+        }
+
+        #choices {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+            align-items: center;
+            padding: 0 10px;  /* Add some padding on small screens */
+            box-sizing: border-box;
+        }
+
+        /* Media Queries for different screen sizes */
+        @media screen and (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .navigation {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .next-btn, .back-btn, .menu-btn {
+                width: 100%;
+                max-width: 200px;
+            }
+        }
+
+        /* Prevent zoom on input fields in iOS */
+        @media screen and (max-width: 768px) {
+            input, select, textarea {
+                font-size: 16px;
+            }
+        }
+
+        /* Add touch-friendly tap targets */
+        @media (hover: none) {
+            .btn, .next-btn, .back-btn, .menu-btn {
+                min-height: 44px;  /* Minimum touch target size */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="mainMenu">
+        <h1>Networking 3 Reviewer</h1>
+        <button class="btn" onclick="loadCheckpoint(1)">Modules 1 – 2: OSPF Concepts and Configuration Exam Answers</button>
+        <button class="btn" onclick="loadCheckpoint(2)">Modules 3 – 5: Network Security Exam Answers</button>
+    </div>
+
+    <div class="container" id="quizContainer" style="display: none;">
+        <div class="question" id="questionText"></div>
+        <div id="choices"></div>
+        <div class="navigation">
+            <button class="back-btn" onclick="previousQuestion()">Previous Question</button>
+            <button class="menu-btn" onclick="showMainMenu()">Main Menu</button>
+            <button class="next-btn" onclick="nextQuestion()">Next Question</button>
+        </div>
+    </div>
+
+    <script>
+        let currentCheckpoint = null;
+        let currentQuestions = [];
+        let currentQuestionIndex = 0;
+        let questionAnswered = false;
+
+        async function loadCheckpoint(number) {
+            try {
+                const response = await fetch(`assets/json/checkpoint${number}.json`);
+                currentQuestions = await response.json();
+                currentCheckpoint = number;
+                currentQuestionIndex = 0;
+                questionAnswered = false;
+                
+                document.getElementById('mainMenu').style.display = 'none';
+                document.getElementById('quizContainer').style.display = 'flex';
+                
+                displayQuestion();
+            } catch (error) {
+                console.error('Error loading checkpoint:', error);
+            }
+        }
+
+        function displayQuestion() {
+            const question = currentQuestions[currentQuestionIndex];
+            document.getElementById('questionText').textContent = question.question;
+            
+            const choicesContainer = document.getElementById('choices');
+            choicesContainer.innerHTML = '';
+            
+            question.choices.forEach(choice => {
+                const button = document.createElement('button');
+                button.className = 'btn';
+                button.textContent = choice;
+                button.onclick = () => checkAnswer(choice);
+                choicesContainer.appendChild(button);
+            });
+
+            // Show/hide navigation buttons
+            document.querySelector('.back-btn').style.display = 
+                currentQuestionIndex > 0 ? 'block' : 'none';
+            document.querySelector('.next-btn').style.display = 'none';
+            document.querySelector('.menu-btn').style.display = 'block';
+            questionAnswered = false;
+        }
+
+        function checkAnswer(selectedAnswer) {
+            if (questionAnswered) return;
+            
+            const question = currentQuestions[currentQuestionIndex];
+            const buttons = document.querySelectorAll('#choices .btn');
+            
+            buttons.forEach(button => {
+                if (button.textContent === selectedAnswer) {
+                    if (selectedAnswer === question.answer) {
+                        button.classList.add('correct');
+                    } else {
+                        button.classList.add('incorrect');
+                    }
+                } else if (button.textContent === question.answer) {
+                    button.classList.add('correct');
+                }
+            });
+
+            questionAnswered = true;
+            document.querySelector('.next-btn').style.display = 
+                currentQuestionIndex < currentQuestions.length - 1 ? 'block' : 'none';
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < currentQuestions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion();
+            }
+        }
+
+        function showMainMenu() {
+            document.getElementById('mainMenu').style.display = 'flex';
+            document.getElementById('quizContainer').style.display = 'none';
+            currentCheckpoint = null;
+            currentQuestions = [];
+            currentQuestionIndex = 0;
+        }
+    </script>
+</body>
+</html>
