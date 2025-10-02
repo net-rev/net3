@@ -314,15 +314,27 @@
             const isMultipleAnswer = Array.isArray(question.answer);
             
             if (isMultipleAnswer) {
-                // For multiple answer questions, toggle selection
+                const maxSelections = question.answer.length;
                 const answerIndex = selectedAnswers.indexOf(selectedAnswer);
+                
                 if (answerIndex > -1) {
                     // Remove from selected answers
                     selectedAnswers.splice(answerIndex, 1);
                 } else {
+                    // Check if we've reached the maximum number of selections
+                    if (selectedAnswers.length >= maxSelections) {
+                        // Show a message and don't add more selections
+                        const noteContainer = document.getElementById('multipleAnswersNote');
+                        noteContainer.innerHTML = `<div class="multiple-answers-note">This question has ${maxSelections} correct answers. You can only select ${maxSelections} choices. Deselect an answer to choose a different one.</div>`;
+                        return;
+                    }
                     // Add to selected answers
                     selectedAnswers.push(selectedAnswer);
                 }
+                
+                // Update the note to show current selection count
+                const noteContainer = document.getElementById('multipleAnswersNote');
+                noteContainer.innerHTML = `<div class="multiple-answers-note">This question has ${maxSelections} correct answers (${selectedAnswers.length}/${maxSelections} selected)</div>`;
                 
                 // Update button styles
                 const buttons = document.querySelectorAll('#choices .btn');
