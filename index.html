@@ -39,6 +39,16 @@
             --toggle-color: #2c3e50;
         }
 
+        /* Ensure all text elements use the CSS variable */
+        [data-theme="light"] .question,
+        [data-theme="light"] .navigation button,
+        [data-theme="light"] .back-btn,
+        [data-theme="light"] .menu-btn,
+        [data-theme="light"] .next-btn,
+        [data-theme="light"] .submit-btn {
+            color: var(--text-color) !important;
+        }
+
         .theme-toggle {
             position: fixed;
             top: 20px;
@@ -73,7 +83,7 @@
             font-family: Arial, sans-serif;
             max-width: 800px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 70px 20px 20px 20px;  /* Added top padding for theme toggle */
             background-color: var(--bg-color);
             color: var(--text-color);
             min-height: 100vh;  /* Full viewport height */
@@ -140,7 +150,7 @@
             font-size: clamp(16px, 4vw, 18px);  /* Responsive font size */
             margin: 20px 10px;
             text-align: center;
-            color: #f6f7fb;  /* Quizlet light text */
+            color: var(--text-color);
             word-wrap: break-word;  /* Handle long questions */
         }
 
@@ -195,9 +205,9 @@
         .next-btn, .back-btn, .menu-btn, .submit-btn {
             padding: 12px 20px;
             font-size: clamp(12px, 3.5vw, 14px);  /* Responsive font size */
-            border: 1px solid #a5b0ff;  /* Pastel blue */
+            border: 1px solid var(--btn-hover-border);
             background-color: transparent;
-            color: #f6f7fb;  /* Quizlet light text */
+            color: var(--text-color);
             border-radius: 8px;
             cursor: pointer;
             display: none;
@@ -206,18 +216,18 @@
         }
 
         .submit-btn {
-            background-color: #8a98fe;
-            border-color: #8a98fe;
-            color: #0a092d;
+            background-color: var(--btn-border);
+            border-color: var(--btn-border);
+            color: var(--bg-color);
             font-weight: bold;
         }
 
         .next-btn:hover, .back-btn:hover, .menu-btn:hover {
-            background-color: rgba(66, 85, 255, 0.1);  /* Quizlet hover state */
+            background-color: var(--btn-hover-bg);
         }
 
         .submit-btn:hover {
-            background-color: #a5b0ff;
+            background-color: var(--btn-hover-border);
         }
 
         #choices {
@@ -265,7 +275,6 @@
 <body>
     <button class="theme-toggle" onclick="toggleTheme()">
         <span class="theme-icon">🌙</span>
-        <span class="theme-text">Dark</span>
     </button>
     
     <div class="container" id="mainMenu">
@@ -308,14 +317,11 @@
 
         function updateThemeButton(theme) {
             const themeIcon = document.querySelector('.theme-icon');
-            const themeText = document.querySelector('.theme-text');
             
             if (theme === 'light') {
                 themeIcon.textContent = '☀️';
-                themeText.textContent = 'Light';
             } else {
                 themeIcon.textContent = '🌙';
-                themeText.textContent = 'Dark';
             }
         }
 
