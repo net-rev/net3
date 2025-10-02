@@ -191,6 +191,7 @@
             color: #a5b0ff;
             margin: 10px 0;
             font-style: italic;
+            text-align: center;
         }
 
         .navigation {
@@ -375,7 +376,7 @@
             const noteContainer = document.getElementById('multipleAnswersNote');
             const isMultipleAnswer = Array.isArray(question.answer);
             if (isMultipleAnswer) {
-                noteContainer.innerHTML = `<div class="multiple-answers-note">This question has multiple correct answers (${question.answer.length} answers)</div>`;
+                noteContainer.innerHTML = `<div class="multiple-answers-note">Select ${question.answer.length} answers</div>`;
             } else {
                 noteContainer.innerHTML = '';
             }
@@ -434,7 +435,7 @@
                     if (selectedAnswers.length >= maxSelections) {
                         // Show a message and don't add more selections
                         const noteContainer = document.getElementById('multipleAnswersNote');
-                        noteContainer.innerHTML = `<div class="multiple-answers-note">This question has ${maxSelections} correct answers. You can only select ${maxSelections} choices. Deselect an answer to choose a different one.</div>`;
+                        noteContainer.innerHTML = `<div class="multiple-answers-note">You can only select ${maxSelections} choices</div>`;
                         return;
                     }
                     // Add to selected answers
@@ -443,7 +444,7 @@
                 
                 // Update the note to show current selection count
                 const noteContainer = document.getElementById('multipleAnswersNote');
-                noteContainer.innerHTML = `<div class="multiple-answers-note">This question has ${maxSelections} correct answers (${selectedAnswers.length}/${maxSelections} selected)</div>`;
+                noteContainer.innerHTML = `<div class="multiple-answers-note">${selectedAnswers.length}/${maxSelections} selected</div>`;
                 
                 // Update button styles
                 const buttons = document.querySelectorAll('#choices .btn');
