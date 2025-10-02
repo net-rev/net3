@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Networking 2 - Reviewer</title>
+    <title>Networking 3 - Reviewer</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -64,6 +64,12 @@
             color: #f6f7fb;
         }
 
+        .btn.selected {
+            background-color: rgba(138, 152, 254, 0.3);  /* Selected but not confirmed */
+            border-color: #8a98fe;
+            color: #f6f7fb;
+        }
+
         .question {
             font-size: clamp(16px, 4vw, 18px);  /* Responsive font size */
             margin: 20px 10px;
@@ -120,7 +126,7 @@
             width: 100%;
         }
 
-        .next-btn, .back-btn, .menu-btn {
+        .next-btn, .back-btn, .menu-btn, .submit-btn {
             padding: 12px 20px;
             font-size: clamp(12px, 3.5vw, 14px);  /* Responsive font size */
             border: 1px solid #a5b0ff;  /* Pastel blue */
@@ -133,8 +139,19 @@
             text-align: center;
         }
 
+        .submit-btn {
+            background-color: #8a98fe;
+            border-color: #8a98fe;
+            color: #0a092d;
+            font-weight: bold;
+        }
+
         .next-btn:hover, .back-btn:hover, .menu-btn:hover {
             background-color: rgba(66, 85, 255, 0.1);  /* Quizlet hover state */
+        }
+
+        .submit-btn:hover {
+            background-color: #a5b0ff;
         }
 
         #choices {
@@ -158,7 +175,7 @@
                 align-items: center;
             }
 
-            .next-btn, .back-btn, .menu-btn {
+            .next-btn, .back-btn, .menu-btn, .submit-btn {
                 width: 100%;
                 max-width: 200px;
             }
@@ -173,7 +190,7 @@
 
         /* Add touch-friendly tap targets */
         @media (hover: none) {
-            .btn, .next-btn, .back-btn, .menu-btn {
+            .btn, .next-btn, .back-btn, .menu-btn, .submit-btn {
                 min-height: 44px;  /* Minimum touch target size */
             }
         }
@@ -196,6 +213,7 @@
         <div class="navigation">
             <button class="back-btn" onclick="previousQuestion()">Previous Question</button>
             <button class="menu-btn" onclick="showMainMenu()">Main Menu</button>
+            <button class="submit-btn" onclick="submitAnswer()">Submit Answer</button>
             <button class="next-btn" onclick="nextQuestion()">Next Question</button>
         </div>
     </div>
@@ -205,6 +223,7 @@
         let currentQuestions = [];
         let currentQuestionIndex = 0;
         let questionAnswered = false;
+        let selectedAnswers = [];
 
         async function loadCheckpoint(number) {
             try {
@@ -276,10 +295,14 @@
                 });
             }
 
+            // Reset selected answers
+            selectedAnswers = [];
+            
             // Show/hide navigation buttons
             document.querySelector('.back-btn').style.display = 
                 currentQuestionIndex > 0 ? 'block' : 'none';
             document.querySelector('.next-btn').style.display = 'none';
+            document.querySelector('.submit-btn').style.display = question.type === 'special' ? 'none' : 'none';
             document.querySelector('.menu-btn').style.display = 'block';
             questionAnswered = false;
         }
@@ -288,13 +311,53 @@
             if (questionAnswered) return;
             
             const question = currentQuestions[currentQuestionIndex];
+            const isMultipleAnswer = Array.isArray(question.answer);
+            
+            if (isMultipleAnswer) {
+                // For multiple answer questions, toggle selection
+                const answerIndex = selectedAnswers.indexOf(selectedAnswer);
+                if (answerIndex > -1) {
+                    // Remove from selected answers
+                    selectedAnswers.splice(answerIndex, 1);
+                } else {
+                    // Add to selected answers
+                    selectedAnswers.push(selectedAnswer);
+                }
+                
+                // Update button styles
+                const buttons = document.querySelectorAll('#choices .btn');
+                buttons.forEach(button => {
+                    button.classList.remove('selected');
+                    if (selectedAnswers.includes(button.textContent)) {
+                        button.classList.add('selected');
+                    }
+                });
+                
+                // Show submit button if at least one answer is selected
+                document.querySelector('.submit-btn').style.display = 
+                    selectedAnswers.length > 0 ? 'block' : 'none';
+                    
+            } else {
+                // For single answer questions, submit immediately
+                selectedAnswers = [selectedAnswer];
+                submitAnswer();
+            }
+        }
+
+        function submitAnswer() {
+            if (questionAnswered || selectedAnswers.length === 0) return;
+            
+            const question = currentQuestions[currentQuestionIndex];
             const buttons = document.querySelectorAll('#choices .btn');
             const correctAnswers = Array.isArray(question.answer) ? question.answer : [question.answer];
             
             buttons.forEach(button => {
                 const buttonText = button.textContent;
                 const isCorrectAnswer = correctAnswers.includes(buttonText);
-                const isSelectedAnswer = buttonText === selectedAnswer;
+                const isSelectedAnswer = selectedAnswers.includes(buttonText);
+                
+                // Remove selection styling
+                button.classList.remove('selected');
                 
                 if (isSelectedAnswer) {
                     if (isCorrectAnswer) {
@@ -309,6 +372,7 @@
             });
 
             questionAnswered = true;
+            document.querySelector('.submit-btn').style.display = 'none';
             document.querySelector('.next-btn').style.display = 
                 currentQuestionIndex < currentQuestions.length - 1 ? 'block' : 'none';
         }
