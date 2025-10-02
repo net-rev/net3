@@ -72,6 +72,45 @@
             word-wrap: break-word;  /* Handle long questions */
         }
 
+        .question-image {
+            max-width: 100%;
+            height: auto;
+            margin: 15px 0;
+            border-radius: 8px;
+            border: 1px solid #a5b0ff;
+        }
+
+        .pre-content {
+            background-color: #1a1a2e;
+            border: 1px solid #a5b0ff;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            color: #f6f7fb;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            text-align: left;
+        }
+
+        .special-question {
+            background-color: rgba(138, 152, 254, 0.1);
+            border: 1px solid #8a98fe;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            color: #f6f7fb;
+            text-align: center;
+        }
+
+        .multiple-answers-note {
+            font-size: 14px;
+            color: #a5b0ff;
+            margin: 10px 0;
+            font-style: italic;
+        }
+
         .navigation {
             display: flex;
             gap: 10px;
@@ -143,12 +182,16 @@
 <body>
     <div class="container" id="mainMenu">
         <h1>Networking 3 Reviewer</h1>
-        <button class="btn" onclick="loadCheckpoint(1)">Modules 1 – 2: OSPF Concepts and Configuration Exam Answers</button>
-        <button class="btn" onclick="loadCheckpoint(2)">Modules 3 – 5: Network Security Exam Answers</button>
+        <button class="btn" onclick="loadCheckpoint(1)">Modules 1 – 2: OSPF Concepts and Configuration Exam</button>
+        <button class="btn" onclick="loadCheckpoint(2)">Modules 3 – 5: Network Security Exam</button>
+        <button class="btn" onclick="loadCheckpoint(3)">Modules 6 – 8: WAN Concepts Exam</button>
     </div>
 
     <div class="container" id="quizContainer" style="display: none;">
         <div class="question" id="questionText"></div>
+        <div id="questionImage"></div>
+        <div id="preContent"></div>
+        <div id="multipleAnswersNote"></div>
         <div id="choices"></div>
         <div class="navigation">
             <button class="back-btn" onclick="previousQuestion()">Previous Question</button>
@@ -184,16 +227,54 @@
             const question = currentQuestions[currentQuestionIndex];
             document.getElementById('questionText').textContent = question.question;
             
+            // Handle images
+            const imageContainer = document.getElementById('questionImage');
+            if (question.img) {
+                imageContainer.innerHTML = `<img src="${question.img}" alt="Question diagram" class="question-image">`;
+            } else {
+                imageContainer.innerHTML = '';
+            }
+            
+            // Handle pre content (code blocks)
+            const preContainer = document.getElementById('preContent');
+            if (question.pre) {
+                preContainer.innerHTML = `<div class="pre-content">${question.pre}</div>`;
+            } else {
+                preContainer.innerHTML = '';
+            }
+            
+            // Handle multiple answers note
+            const noteContainer = document.getElementById('multipleAnswersNote');
+            const isMultipleAnswer = Array.isArray(question.answer);
+            if (isMultipleAnswer) {
+                noteContainer.innerHTML = `<div class="multiple-answers-note">This question has multiple correct answers (${question.answer.length} answers)</div>`;
+            } else {
+                noteContainer.innerHTML = '';
+            }
+            
             const choicesContainer = document.getElementById('choices');
             choicesContainer.innerHTML = '';
             
-            question.choices.forEach(choice => {
-                const button = document.createElement('button');
-                button.className = 'btn';
-                button.textContent = choice;
-                button.onclick = () => checkAnswer(choice);
-                choicesContainer.appendChild(button);
-            });
+            // Handle special questions
+            if (question.type === 'special') {
+                choicesContainer.innerHTML = `<div class="special-question">
+                    <p><strong>Special Question:</strong> This is a matching or exhibit-based question.</p>
+                    <p>${question.answer}</p>
+                </div>`;
+                // For special questions, immediately show the next button
+                questionAnswered = true;
+                document.querySelector('.next-btn').style.display = 
+                    currentQuestionIndex < currentQuestions.length - 1 ? 'block' : 'none';
+            } else {
+                // Regular multiple choice questions
+                question.choices.forEach(choice => {
+                    const button = document.createElement('button');
+                    button.className = 'btn';
+                    button.textContent = choice;
+                    button.onclick = () => checkAnswer(choice);
+                    choicesContainer.appendChild(button);
+                });
+            }
 
             // Show/hide navigation buttons
             document.querySelector('.back-btn').style.display = 
@@ -208,15 +289,21 @@
             
             const question = currentQuestions[currentQuestionIndex];
             const buttons = document.querySelectorAll('#choices .btn');
+            const correctAnswers = Array.isArray(question.answer) ? question.answer : [question.answer];
             
             buttons.forEach(button => {
-                if (button.textContent === selectedAnswer) {
-                    if (selectedAnswer === question.answer) {
+                const buttonText = button.textContent;
+                const isCorrectAnswer = correctAnswers.includes(buttonText);
+                const isSelectedAnswer = buttonText === selectedAnswer;
+                
+                if (isSelectedAnswer) {
+                    if (isCorrectAnswer) {
                         button.classList.add('correct');
                     } else {
                         button.classList.add('incorrect');
                     }
-                } else if (button.textContent === question.answer) {
+                } else if (isCorrectAnswer) {
+                    // Show all correct answers
                     button.classList.add('correct');
                 }
             });
