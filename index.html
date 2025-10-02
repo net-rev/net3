@@ -5,14 +5,80 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Networking 3 - Reviewer</title>
     <style>
+        :root {
+            /* Dark mode colors (default) */
+            --bg-color: #0a092d;
+            --text-color: #f6f7fb;
+            --container-bg: rgba(255, 255, 255, 0.05);
+            --container-border: rgba(255, 255, 255, 0.1);
+            --btn-border: #8a98fe;
+            --btn-hover-bg: rgba(66, 85, 255, 0.1);
+            --btn-hover-border: #a5b0ff;
+            --correct-bg: rgba(76, 175, 80, 0.3);
+            --incorrect-bg: rgba(244, 67, 54, 0.3);
+            --selected-bg: rgba(33, 150, 243, 0.3);
+            --selected-border: #2196f3;
+            --toggle-bg: rgba(255, 255, 255, 0.1);
+            --toggle-color: #f6f7fb;
+        }
+
+        [data-theme="light"] {
+            /* Light mode colors */
+            --bg-color: #f5f7fa;
+            --text-color: #2c3e50;
+            --container-bg: rgba(255, 255, 255, 0.9);
+            --container-border: rgba(0, 0, 0, 0.1);
+            --btn-border: #4255ff;
+            --btn-hover-bg: rgba(66, 85, 255, 0.1);
+            --btn-hover-border: #6c7cff;
+            --correct-bg: rgba(76, 175, 80, 0.2);
+            --incorrect-bg: rgba(244, 67, 54, 0.2);
+            --selected-bg: rgba(33, 150, 243, 0.2);
+            --selected-border: #2196f3;
+            --toggle-bg: rgba(0, 0, 0, 0.1);
+            --toggle-color: #2c3e50;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--toggle-bg);
+            border: 1px solid var(--btn-border);
+            color: var(--toggle-color);
+            border-radius: 50px;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .theme-toggle:hover {
+            background: var(--btn-hover-bg);
+            border-color: var(--btn-hover-border);
+            transform: translateY(-2px);
+        }
+
+        .theme-icon {
+            font-size: 16px;
+        }
+
         body {
             font-family: Arial, sans-serif;
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #0a092d;  /* Quizlet dark mode background */
+            background-color: var(--bg-color);
+            color: var(--text-color);
             min-height: 100vh;  /* Full viewport height */
             box-sizing: border-box;  /* Include padding in height calculation */
+            transition: all 0.3s ease;
         }
 
         .container {
@@ -26,7 +92,7 @@
         }
 
         .container h1 {
-            color: #f6f7fb;  /* Quizlet light text */
+            color: var(--text-color);
             font-size: clamp(1.5rem, 5vw, 2rem);  /* Responsive font size */
             text-align: center;
             margin: 20px 0;
@@ -37,9 +103,9 @@
             max-width: 400px;  /* Maximum width for larger screens */
             padding: 15px 25px;
             font-size: clamp(14px, 4vw, 16px);  /* Responsive font size */
-            border: 1px solid #8a98fe;  /* Quizlet primary blue */
+            border: 1px solid var(--btn-border);
             background-color: transparent;
-            color: #f6f7fb;  /* Quizlet light text */
+            color: var(--text-color);
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -48,26 +114,26 @@
         }
 
         .btn:hover {
-            background-color: rgba(66, 85, 255, 0.1);  /* Quizlet hover state */
-            border-color: #a5b0ff;
+            background-color: var(--btn-hover-bg);
+            border-color: var(--btn-hover-border);
         }
 
         .btn.correct {
-            background-color: #1d8653;  /* Quizlet correct answer green */
-            border-color: #1d8653;
-            color: #f6f7fb;
+            background-color: var(--correct-bg);
+            border-color: #4caf50;
+            color: var(--text-color);
         }
 
         .btn.incorrect {
-            background-color: #b61a1a;  /* Quizlet incorrect answer red */
-            border-color: #b61a1a;
-            color: #f6f7fb;
+            background-color: var(--incorrect-bg);
+            border-color: #f44336;
+            color: var(--text-color);
         }
 
         .btn.selected {
-            background-color: rgba(138, 152, 254, 0.3);  /* Selected but not confirmed */
-            border-color: #8a98fe;
-            color: #f6f7fb;
+            background-color: var(--selected-bg);  /* Selected but not confirmed */
+            border-color: var(--selected-border);
+            color: var(--text-color);
         }
 
         .question {
@@ -197,6 +263,11 @@
     </style>
 </head>
 <body>
+    <button class="theme-toggle" onclick="toggleTheme()">
+        <span class="theme-icon">🌙</span>
+        <span class="theme-text">Dark</span>
+    </button>
+    
     <div class="container" id="mainMenu">
         <h1>Networking 3 Reviewer</h1>
         <button class="btn" onclick="loadCheckpoint(1)">Modules 1 – 2: OSPF Concepts and Configuration Exam</button>
@@ -219,6 +290,38 @@
     </div>
 
     <script>
+        // Theme management
+        function initializeTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateThemeButton(savedTheme);
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeButton(newTheme);
+        }
+
+        function updateThemeButton(theme) {
+            const themeIcon = document.querySelector('.theme-icon');
+            const themeText = document.querySelector('.theme-text');
+            
+            if (theme === 'light') {
+                themeIcon.textContent = '☀️';
+                themeText.textContent = 'Light';
+            } else {
+                themeIcon.textContent = '🌙';
+                themeText.textContent = 'Dark';
+            }
+        }
+
+        // Initialize theme on page load
+        document.addEventListener('DOMContentLoaded', initializeTheme);
+
         let currentCheckpoint = null;
         let currentQuestions = [];
         let currentQuestionIndex = 0;
