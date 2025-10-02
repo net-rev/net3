@@ -24,19 +24,19 @@
 
         [data-theme="light"] {
             /* Light mode colors */
-            --bg-color: #f5f7fa;
-            --text-color: #2c3e50;
-            --container-bg: rgba(255, 255, 255, 0.9);
-            --container-border: rgba(0, 0, 0, 0.1);
-            --btn-border: #4255ff;
-            --btn-hover-bg: rgba(66, 85, 255, 0.1);
-            --btn-hover-border: #6c7cff;
-            --correct-bg: rgba(76, 175, 80, 0.2);
-            --incorrect-bg: rgba(244, 67, 54, 0.2);
-            --selected-bg: rgba(33, 150, 243, 0.2);
-            --selected-border: #2196f3;
-            --toggle-bg: rgba(0, 0, 0, 0.1);
-            --toggle-color: #2c3e50;
+            --bg-color: #ffffff;
+            --text-color: #1a1a1a;
+            --container-bg: rgba(248, 249, 250, 0.95);
+            --container-border: rgba(0, 0, 0, 0.15);
+            --btn-border: #2c5aa0;
+            --btn-hover-bg: rgba(44, 90, 160, 0.1);
+            --btn-hover-border: #1e3a8a;
+            --correct-bg: rgba(34, 197, 94, 0.15);
+            --incorrect-bg: rgba(239, 68, 68, 0.15);
+            --selected-bg: rgba(59, 130, 246, 0.15);
+            --selected-border: #3b82f6;
+            --toggle-bg: rgba(0, 0, 0, 0.08);
+            --toggle-color: #1a1a1a;
         }
 
         /* Ensure all text elements use the CSS variable */
@@ -217,18 +217,13 @@
         }
 
         .submit-btn {
-            background-color: var(--btn-border);
+            background-color: transparent;
             border-color: var(--btn-border);
-            color: var(--bg-color);
-            font-weight: bold;
+            color: var(--text-color);
         }
 
-        .next-btn:hover, .back-btn:hover, .menu-btn:hover {
+        .next-btn:hover, .back-btn:hover, .menu-btn:hover, .submit-btn:hover {
             background-color: var(--btn-hover-bg);
-        }
-
-        .submit-btn:hover {
-            background-color: var(--btn-hover-border);
         }
 
         #choices {
