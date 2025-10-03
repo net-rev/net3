@@ -389,6 +389,7 @@
                 questionAnswered = true;
                 document.querySelector('.next-btn').style.display = 
                     currentQuestionIndex < currentQuestions.length - 1 ? 'block' : 'none';
+                document.querySelector('.submit-btn').style.display = 'none';
             } else {
                 // Regular multiple choice questions
                 question.choices.forEach(choice => {
@@ -398,18 +399,20 @@
                     button.onclick = () => checkAnswer(choice);
                     choicesContainer.appendChild(button);
                 });
+                
+                // For regular questions, hide next button initially
+                document.querySelector('.next-btn').style.display = 'none';
+                document.querySelector('.submit-btn').style.display = 'none';
+                questionAnswered = false;
             }
 
             // Reset selected answers
             selectedAnswers = [];
             
-            // Show/hide navigation buttons
+            // Show/hide navigation buttons (common for both types)
             document.querySelector('.back-btn').style.display = 
                 currentQuestionIndex > 0 ? 'block' : 'none';
-            document.querySelector('.next-btn').style.display = 'none';
-            document.querySelector('.submit-btn').style.display = question.type === 'special' ? 'none' : 'none';
             document.querySelector('.menu-btn').style.display = 'block';
-            questionAnswered = false;
         }
 
         function checkAnswer(selectedAnswer) {
