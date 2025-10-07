@@ -410,7 +410,6 @@
   },
   {
     "question": "39. What is a benefit of multiarea OSPF routing?",
-    "img": "https://itexamanswers.net/wp-content/uploads/2019/12/2025-02-12_111248.jpg",
     "choices": [
       "Topology changes in one area do not cause SPF recalculations in other areas.",
       "Routers in all areas share the same link-state database and have a complete picture of the entire network.",
