@@ -453,6 +453,7 @@
   },
   {
     "question": "43. Refer to the exhibit. Suppose that routers B, C, and D have a default priority, and router A has a priority 0. Which conclusion can be drawn from the DR/BDR election process?​",
+    "img": "https://itexamanswers.net/wp-content/uploads/2019/12/i247460v1n3_Item-247460.png",
     "choices": [
       "If the priority of router C is changed to 255, then it will become the DR.",
       "Router A will become the DR and router D will become the BDR.​",
