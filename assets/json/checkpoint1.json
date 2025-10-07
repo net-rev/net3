@@ -47,7 +47,7 @@
     "answer": "routers that have the same link-state information in their LSDBs"
   },
   {
-    "question": "5.",
+    "question": "5. What is used to facilitate hierarchical routing in OSPF?",
     "choices": [
       "the use of multiple areas",
       "frequent SPF calculations",
