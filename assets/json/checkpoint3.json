@@ -40,7 +40,6 @@
   },
   {
     "question": "4. What is a disadvantage of NAT?",
-    "img": "https://itexamanswers.net/wp-content/uploads/2019/12/i215652v4n1_215652.gif",
     "choices": [
       "There is no end-to-end addressing.",
       "The router does not need to alter the checksum of the IPv4 packets.​",
@@ -376,7 +375,6 @@
   },
   {
     "question": "33. Which statement describes a VPN?",
-    "img": "https://itexamanswers.net/wp-content/uploads/2019/12/2020-05-20_080357.jpg",
     "choices": [
       "VPNs use open source virtualization software to create the tunnel through the Internet.",
       "VPNs use logical connections to create public networks through the Internet.",
@@ -408,7 +406,6 @@
   },
   {
     "question": "36. Which type of VPN routes packets through virtual tunnel interfaces for encryption and forwarding?",
-    "img": "https://itexamanswers.net/wp-content/uploads/2019/12/2020-01-21_004658.jpg",
     "choices": [
       "MPLS VPN",
       "IPsec virtual tunnel interface",
@@ -616,7 +613,6 @@
   },
   {
     "question": "56. Which type of VPN has both Layer 2 and Layer 3 implementations?",
-    "img": "https://itexamanswers.net/wp-content/uploads/2016/02/2017-06-04_082118.png",
     "choices": [
       "IPsec virtual tunnel interface",
       "dynamic multipoint VPN",
@@ -645,7 +641,6 @@
   },
   {
     "question": "59. Which type of VPN allows multicast and broadcast traffic over a secure site-to-site VPN?",
-    "img": "https://itexamanswers.net/wp-content/uploads/2019/12/Modules-6_8-WAN-Concepts-Exam-Answers.png",
     "choices": [
       "dynamic multipoint VPN",
       "SSL VPN",
