@@ -354,10 +354,10 @@
     "answer": "a 32-bit number formatted like an IPv4 address"
   },
   {
-    "question": "33. Question as presented:",
+    "question": "33. Question as presented: DUAL is the algorithm used by EIGRP. In multiarea OSPF, OSPF is implemented using multiple areas, and all of them must be connected to the backbone area.",
     "type": "special",
     "choices": [],
-    "answer": "See image for the answer"
+    "answer": "No answer, proceed."
   },
   {
     "question": "34. After modifying the router ID on an OSPF router, what is the preferred method to make the new router ID effective?",
