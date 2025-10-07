@@ -657,14 +657,8 @@
   {
     "question": "60. Match the steps with the actions that are involved when an internal host with IP address 192.168.10.10 attempts to send a packet to and external server at the IP address 209.165.200.254 across a router R1 that running dynamic NAT. (Not all options are used.)",
     "img": "https://itexamanswers.net/wp-content/uploads/2019/12/Modules-6_8-WAN-Concepts-Exam-Answers.png",
-    "choices": [
-      "step 5 => R1 replaces the address 192.168.10.10 with a translated inside global address.",
-      "step 2 => R1 checks the NAT configuration to determine if this packet should be translated.",
-      "step 4 => R1 selects an available global address from the dynamic address pool.",
-      "step 1 => The host sends packets that request a connection to the server at the address 209.165.200.254",
-      "step 3 => If there is no translation entry for this IP address, R1 determines that the source address 192.168.10.10 must be translated"
-    ],
-    "answer": "Unknown"
+    "choices": [],
+    "answer": "See image for the answer"
   },
   {
     "question": "61. Which type of VPN involves passenger, carrier, and transport protocols?",
