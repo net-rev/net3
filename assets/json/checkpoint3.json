@@ -657,6 +657,7 @@
   {
     "question": "60. Match the steps with the actions that are involved when an internal host with IP address 192.168.10.10 attempts to send a packet to and external server at the IP address 209.165.200.254 across a router R1 that running dynamic NAT. (Not all options are used.)",
     "img": "https://itexamanswers.net/wp-content/uploads/2019/12/Modules-6_8-WAN-Concepts-Exam-Answers.png",
+    "type": "special",
     "choices": [],
     "answer": "See image for the answer"
   },
