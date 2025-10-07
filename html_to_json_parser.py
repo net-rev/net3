@@ -157,8 +157,12 @@ def extract_quiz_data(html_content):
                             choices.append(choice_text)
                             
                             # Check if this is a correct answer
-                            span_tag = li.find('span', style=lambda x: x and 'color: #ff0000' in x)
-                            if span_tag:
+                            # Look for any span or strong tag with color styling (any color means it's the answer)
+                            colored_tag = li.find(['span', 'strong'], style=lambda x: x and 'color:' in x)
+                            if colored_tag:
+                                correct_answers.append(choice_text)
+                            # Also check if the li element itself has the 'correct_answer' class
+                            elif li.get('class') and 'correct_answer' in li.get('class'):
                                 correct_answers.append(choice_text)
                     
                     break
@@ -209,8 +213,16 @@ def extract_quiz_data(html_content):
             if pre_content:
                 question_data['pre'] = pre_content
             
-            # Add question if we found choices, or if it's a special question type
-            if choices:
+            # Check if this is a special question type first (matching, image-based, etc.)
+            question_text_lower = question_text.lower()
+            is_special_question = any(keyword in question_text_lower for keyword in ['match', 'question as presented', 'refer to the exhibit', 'place the options in the following order'])
+            
+            if is_special_question:
+                question_data['type'] = 'special'
+                question_data['choices'] = []
+                question_data['answer'] = "See image for the answer"
+                questions.append(question_data)
+            elif choices:
                 question_data['choices'] = choices
                 
                 # Set answer format based on number of correct answers
@@ -219,18 +231,14 @@ def extract_quiz_data(html_content):
                 elif len(correct_answers) > 1:
                     question_data['answer'] = correct_answers
                 else:
-                    # If no correct answer found, mark as unknown
-                    question_data['answer'] = "Unknown"
+                    # If no correct answer found, check if it might be a special question we missed
+                    if any(keyword in question_text_lower for keyword in ['match', 'order', 'drag and drop', 'sequence']):
+                        question_data['type'] = 'special'
+                        question_data['answer'] = "See image for the answer"
+                    else:
+                        question_data['answer'] = "Unknown"
                 
                 questions.append(question_data)
-            else:
-                # Check if this is a special question type (matching, image-based, etc.)
-                question_text_lower = question_text.lower()
-                if any(keyword in question_text_lower for keyword in ['match', 'question as presented', 'refer to the exhibit']):
-                    question_data['type'] = 'special'
-                    question_data['choices'] = []
-                    question_data['answer'] = "See image for the answer"
-                    questions.append(question_data)
         
         i += 1
     

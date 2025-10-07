@@ -480,7 +480,7 @@
       "show ip ospf interface fastethernet 0/1",
       "show ip ospf interface serial 0/0/0"
     ],
-    "answer": "Unknown"
+    "answer": "show ip ospf interface serial 0/0/0"
   },
   {
     "question": "46. An administrator is configuring single-area OSPF on a router. One of the networks that must be advertised is 128.107.0.0 255.255.255.192. What wildcard mask would the administrator use in the OSPF network statement?",
@@ -490,7 +490,7 @@
       "0.0.0.3",
       "0.0.0.7"
     ],
-    "answer": "Unknown"
+    "answer": "0.0.0.63"
   },
   {
     "question": "47. Match each OSPF packet type to how it is used by a router. (Not all options are used.)",
@@ -517,7 +517,7 @@
       "0.0.31.255",
       "0.0.0.255"
     ],
-    "answer": "Unknown"
+    "answer": "0.0.3.255"
   },
   {
     "question": "50. An administrator is configuring single-area OSPF on a router. One of the networks that must be advertised is 128.107.0.0 255.255.252.0. What wildcard mask would the administrator use in the OSPF network statement?",
@@ -527,7 +527,7 @@
       "0.0.0.3",
       "0.0.63.255"
     ],
-    "answer": "Unknown"
+    "answer": "0.0.3.255"
   },
   {
     "question": "51. Which step in the link-state routing process is described by a router flooding link-state and cost information about each directly connected link?",
@@ -595,6 +595,6 @@
       "executing the SPF algorithm",
       "building the topology table"
     ],
-    "answer": "Unknown"
+    "answer": "building the topology table"
   }
 ]

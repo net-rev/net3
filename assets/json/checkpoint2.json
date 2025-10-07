@@ -613,7 +613,7 @@
       "standard ACL inbound on R1 G0/1",
       "standard ACL inbound on R1 vty lines"
     ],
-    "answer": "Unknown"
+    "answer": "extended ACL inbound on R3 G0/0"
   },
   {
     "question": "56. What does the CLI prompt change to after entering the command ip access-list standard aaa from global configuration mode?",
@@ -783,7 +783,7 @@
       "standard ACL inbound on R1 G0/1",
       "extended ACL inbound on R3 S0/0/1"
     ],
-    "answer": "Unknown"
+    "answer": "standard ACL inbound on R1 G0/1"
   },
   {
     "question": "72. A technician is tasked with using ACLs to secure a router. When would the technician use the host configuration option or command?",
