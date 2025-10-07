@@ -615,7 +615,6 @@
   },
   {
     "question": "56. What does the CLI prompt change to after entering the command ip access-list standard aaa from global configuration mode?",
-    "img": "https://itexamanswers.net/wp-content/uploads/2019/12/i389082v1n1_C3M4_Diagram.png",
     "choices": [
       "Router(config-line)#",
       "Router(config-std-nacl)#",
