@@ -707,7 +707,6 @@
   },
   {
     "question": "65. A technician is tasked with using ACLs to secure a router. When would the technician use the ip access-group 101 in configuration option or command?",
-    "img": "https://itexamanswers.net/wp-content/uploads/2020/07/What-is-the-best-ACL-type-and-placement-to-use-in-this-situation.jpg",
     "choices": [
       "to secure administrative access to the router",
       "to apply an extended ACL to an interface",
